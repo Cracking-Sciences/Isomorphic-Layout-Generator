@@ -24,9 +24,25 @@ def create_isomorphic_keyboard(start_note, rows, cols, upper_increase = 5):
 
     return pd.DataFrame(keyboard_layout)
 
+def highlight_c_notes(val):
+    """
+    Function to apply HTML styling to cells with C notes.
+    """
+    color = 'red' if ('C' in val and 'C#' not in val)else 'black'
+    return f'<span style="color: {color}">{val}</span>'
+
+
 keyboard_layout = create_isomorphic_keyboard("C2", 16, 16, 5)
 
 # Display the layout
 keyboard_layout = keyboard_layout.iloc[::-1]
 print(keyboard_layout)
 keyboard_layout.to_csv("keyboard_layout.csv", index=False)
+
+html_keyboard = keyboard_layout.to_html(escape=False, formatters=[highlight_c_notes]*keyboard_layout.shape[1])
+
+html_keyboard_file_path = "keyboard_layout.html"
+
+with open(html_keyboard_file_path, 'w') as file:
+    file.write(html_keyboard)
+
